@@ -1,30 +1,42 @@
 //this class takes in keys and outputs a float value.
 class NumericInput {
+  NumericInput({this.onEnterPress});
+  void Function(double value) onEnterPress;
 
   String value = "";
-  
+
   void keyPress(String key) {
-      if(key == "C"){
-        value = "";
+    if (key == "backspace") {
+      if (value.length > 0) {
+        value = value.substring(0, value.length - 1);
       }
-      else if(key == "."){
-        if(!value.contains(".")){
-          value += ".";
-        }
+    } else if (key == "clear") {
+      value = "";
+    } else if (key == "enter") {
+      onEnterPress(getValueAsDouble());
+      value = "";
+    } else if (key == "period") {
+      if (!value.contains(".")) {
+        value += ".";
       }
-      else if(key == "-"){
-        if(!value.contains("-")){
-          value = "-" + value;
-        }else{
-          value = value.substring(1);
-        }
+    } else if (key == "negative") {
+      if (!value.contains("-")) {
+        value = "-" + value;
+      } else {
+        value = value.substring(1);
       }
-      else{
-        value += key;
-      }
+    } else {
+      value += key;
+    }
   }
 
-  double getValueAsFloat() {
-    return 0.0;
+  double getValueAsDouble() {
+    double answer;
+    try {
+      answer = double.tryParse(value);
+    } catch (e) {
+      return null;
+    }
+    return answer;
   }
 }
