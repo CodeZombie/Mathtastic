@@ -3,6 +3,7 @@ import 'package:math_app/numericInput.dart';
 import 'keyboard.dart';
 import 'Calculator.dart';
 import 'equation.dart';
+import 'ToggleListTile.dart';
 
 void main() {
   runApp(Mathtastic());
@@ -12,9 +13,9 @@ class Mathtastic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mathtastic',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Mathtastic'),
@@ -80,6 +81,37 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(child: ListView(
+    // Important: Remove any padding from the ListView.
+    padding: EdgeInsets.zero,
+    children: <Widget>[
+      DrawerHeader(
+        child: Text('Mathtastic', style: new TextStyle(fontSize: 25, color: Colors.white,)),
+        decoration: BoxDecoration(
+          color: Colors.red,
+        ),
+      ),
+      ToggleListTile(title: "Addition", enabled: calculator.enableAddition, onChange: (v) {
+        setState(() {
+          calculator.setEnableAddition(v);
+        });
+      }),
+      ToggleListTile(title: "Subtraction", enabled: calculator.enableSubtraction, onChange: (v) {
+        setState(() {
+          calculator.setEnableSubtraction(v);
+        });
+      }),
+      ToggleListTile(title: "Multiplication", enabled: calculator.enableMultiplication, onChange: (v) {
+        setState(() {
+          calculator.setEnableMultiplication(v);
+        });
+      }),
+      ToggleListTile(title: "Division", enabled: calculator.enableDivision, onChange: (v) {
+        setState(() {
+          calculator.setEnableDivision(v);
+        });
+      }),
+      ])),
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -88,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           visible: (showCorrectWidget == false && showIncorrectWidget == false),
           child: Equation(
               operands: calculator.operands,
-              operator: calculator.getOperator(),
+              operator: calculator.operator,
               answer: keyboardValue.value),
         ),
 

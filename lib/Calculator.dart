@@ -3,29 +3,89 @@ import 'dart:math';
 class Calculator {
   //this class will handle all the state and business logic of the application.
   void Function(bool correct) onAnswer;
-  final List operators = ["+", "-", "×", "÷"];
   List operands = [];
   Random randomNumberGenerator;
-  int operatorIndex = 0;
+  String operator = "+";
+
+  bool enableAddition = true;
+  bool enableSubtraction = true;
+  bool enableMultiplication = true;
+  bool enableDivision = false;
+
+  void setEnableAddition(bool value){
+    if (!enableSubtraction && !enableMultiplication && !enableDivision){
+      return;
+    }
+    enableAddition = value;
+    if(value == false && operator == "+"){
+      newQuestion();
+    }
+  }
+   void setEnableSubtraction(bool value){
+     if (!enableAddition && !enableMultiplication && !enableDivision){
+      return;
+    }
+    enableSubtraction = value;
+    if(value == false && operator == "-"){
+      newQuestion();
+    }
+  }
+   void setEnableMultiplication(bool value){
+     if (!enableAddition& !enableSubtraction && !enableDivision){
+      return;
+    }
+    enableMultiplication = value;
+    if(value == false && operator == "×"){
+      newQuestion();
+    }
+  }
+   void setEnableDivision(bool value){
+     if (!enableAddition& !enableSubtraction && !enableMultiplication){
+      return;
+    }
+    enableDivision = value;
+    if(value == false && operator == "÷"){
+      newQuestion();
+    }
+  }
+
+  List getOperators() {
+    List ops = [];
+    if(enableAddition) {
+      ops.add("+");
+    }
+    if(enableSubtraction){
+      ops.add("-");
+    }
+    if(enableMultiplication){
+      ops.add("×");
+    }
+    if(enableDivision){
+      ops.add("÷");
+    }
+    return ops;
+  }
 
   Calculator(this.onAnswer) {
     randomNumberGenerator = new Random();
     newQuestion();
   }
 
-  String getOperator() {
-    return operators[operatorIndex];
-  }
-
   void newQuestion() {
     operands = new List();
-    var range = 100;
-    operatorIndex = randomNumberGenerator.nextInt(operators.length);
-    if (operatorIndex > 1) {
-      range = 10;
+    operator = getOperators()[randomNumberGenerator.nextInt(getOperators().length)];
+
+    if(operator == "÷"){
+      double divisor = randomNumberGenerator.nextInt(11).toDouble() + 1;
+      operands.add(divisor * randomNumberGenerator.nextInt(15).toDouble());
+      operands.add(divisor);
+    }else if(operator == "×"){
+      operands.add(randomNumberGenerator.nextInt(12).toDouble());
+      operands.add(randomNumberGenerator.nextInt(12).toDouble());
+    }else{
+      operands.add(randomNumberGenerator.nextInt(150).toDouble());
+      operands.add(randomNumberGenerator.nextInt(150).toDouble());
     }
-    operands.add(randomNumberGenerator.nextInt(range).toDouble());
-    operands.add(randomNumberGenerator.nextInt(range).toDouble());
   }
 
   void checkAnswer(double answer) {
@@ -34,13 +94,13 @@ class Calculator {
       return;
     }
     double realAnswer;
-    if (operatorIndex == 0) {
+    if (getOperators() == "+") {
       realAnswer = (operands[0] + operands[1]).toDouble();
-    } else if (operatorIndex == 1) {
+    } else if (operator == "-") {
       realAnswer = (operands[0] - operands[1]).toDouble();
-    } else if (operatorIndex == 2) {
+    } else if (operator == "×") {
       realAnswer = (operands[0] * operands[1]).toDouble();
-    } else if (operatorIndex == 3) {
+    } else if (operator == "÷") {
       realAnswer = (operands[0] / operands[1]).toDouble();
     }
     if (realAnswer == answer) {

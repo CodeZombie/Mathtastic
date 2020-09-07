@@ -63,12 +63,12 @@ class Keyboard extends StatelessWidget {
       },
       {
         'id': 'backspace',
-        'item': Icon(Icons.arrow_back, size: 24),
+        'item': Icon(Icons.arrow_back, size: 24,),
       },
       {'id': "spacing"},
       {
         'id': 'enter',
-        'item': Icon(Icons.done, size: 24, color: Colors.blue),
+        'item': Icon(Icons.done, size: 24, color: Colors.red),
       },
     ];
 
@@ -99,23 +99,3 @@ class Keyboard extends StatelessWidget {
     );
   }
 }
-
-/*
-  Widget build(BuildContext context) {
-    List buttons = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
-    return Container(
-      constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(color: Colors.lightBlueAccent),
-      child: GridView.count(
-          crossAxisCount: 3,
-          childAspectRatio: 1.5,
-          children: List.generate(buttons.length, (index) {
-            return Center(
-                child: Text(
-              buttons[index],
-              style: Theme.of(context).textTheme.headline5,
-            ));
-          })),
-    );
-  }
-  */
