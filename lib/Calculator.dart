@@ -2,13 +2,13 @@ import 'dart:math';
 
 class Calculator {
   //this class will handle all the state and business logic of the application.
-  void Function() onCorrectAnswer;
+  void Function(bool correct) onAnswer;
   final List operators = ["+", "-", "×", "÷"];
   List operands = [];
   Random randomNumberGenerator;
   int operatorIndex = 0;
 
-  Calculator(this.onCorrectAnswer) {
+  Calculator(this.onAnswer) {
     randomNumberGenerator = new Random();
     newQuestion();
   }
@@ -44,9 +44,10 @@ class Calculator {
       realAnswer = (operands[0] / operands[1]).toDouble();
     }
     if (realAnswer == answer) {
-      onCorrectAnswer();
+      onAnswer(true);
       print("CORRECT");
     } else {
+      onAnswer(false);
       print("WRONG");
     }
     newQuestion();

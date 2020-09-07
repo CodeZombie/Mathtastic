@@ -5,11 +5,10 @@ import 'Calculator.dart';
 import 'equation.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Mathtastic());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class Mathtastic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Math!'),
+      home: MyHomePage(title: 'Mathtastic'),
     );
   }
 }
@@ -36,12 +35,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Calculator calculator;
   NumericInput keyboardValue;
   bool equationVisible = true;
+  bool showCorrectWidget = false;
+  bool showIncorrectWidget = false;
 
   AnimationController _animationController;
 
   _MyHomePageState() {
     calculator = new Calculator(
-      _onCorrectAnswer,
+      _onAnswer,
     );
     keyboardValue = new NumericInput(
       onEnterPress: calculator.checkAnswer,
@@ -56,14 +57,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     });
   }
 
-  void _onCorrectAnswer() {
+  void _onAnswer(bool correct) {
     setState(() {
+      showCorrectWidget = showIncorrectWidget = false;
       _animationController.reset();
-      equationVisible = false;
       _animationController.forward();
+
+      if(correct) {
+        showCorrectWidget = true;
+      }else{
+        showIncorrectWidget = true;
+      }
+
       Future.delayed(const Duration(milliseconds: 500), () {
         setState(() {
-          equationVisible = true;
+          showCorrectWidget = showIncorrectWidget = false;
         });
       });
     });
@@ -77,28 +85,45 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       body: Column(children: <Widget>[
         Visibility(
-          visible: equationVisible,
+          visible: (showCorrectWidget == false && showIncorrectWidget == false),
           child: Equation(
               operands: calculator.operands,
               operator: calculator.getOperator(),
               answer: keyboardValue.value),
         ),
+
         Visibility(
-            visible: !equationVisible,
+            visible: showCorrectWidget,
             child: Expanded(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 AnimatedIcon(
-                  icon: AnimatedIcons.menu_arrow,
+                  icon: AnimatedIcons.event_add,
                   progress: _animationController,
-                  semanticLabel: 'Show menu',
                   size: 96,
                 ),
                 Text("Correct!"),
               ],
             ))),
+
+            Visibility(
+            visible: showIncorrectWidget,
+            child: Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                AnimatedIcon(
+                  icon: AnimatedIcons.search_ellipsis,
+                  progress: _animationController,
+                  size: 96,
+                ),
+                Text("Incorrect!"),
+              ],
+            ))),
+
         Keyboard(onKeyPress: _getKeyPress),
       ]),
     );

@@ -24,14 +24,14 @@ class Equation extends StatelessWidget {
         TextCard(
           text: formatNumber(operands[0]),
           textColor: Colors.blue,
-          size: 72,
+          size: 92,
         ),
         TextCard(
             preText: operator,
             preTextColor: Colors.red,
             text: formatNumber(operands[1]),
             textColor: Colors.blue,
-            size: 72),
+            size: 92),
         Divider(
           color: Colors.red,
           height: 20,
