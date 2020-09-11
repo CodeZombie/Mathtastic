@@ -39,13 +39,6 @@ class Equation extends StatelessWidget {
           indent: 16,
           endIndent: 16,
         ),
-        TextCard(
-          preText: "=",
-          preTextColor: Colors.green,
-          text: answer,
-          textColor: Colors.green,
-          size: 64,
-        ),
       ],
     ));
   }

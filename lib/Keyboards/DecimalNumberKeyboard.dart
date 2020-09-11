@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Keyboard extends StatelessWidget {
-  Keyboard({Key key, this.onKeyPress}) : super(key: key);
+import 'keyboard.dart';
 
-  final void Function(String key) onKeyPress;
+class DecimalNumberKeyboard extends StatelessWidget {
+  DecimalNumberKeyboard({Key key, this.onEnter}) : super(key: key);
+  final void Function(String value) onEnter;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,10 @@ class Keyboard extends StatelessWidget {
       },
       {
         'id': 'backspace',
-        'item': Icon(Icons.arrow_back, size: 24,),
+        'item': Icon(
+          Icons.arrow_back,
+          size: 24,
+        ),
       },
       {'id': "spacing"},
       {
@@ -72,30 +76,6 @@ class Keyboard extends StatelessWidget {
       },
     ];
 
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(color: Colors.blueGrey[50]),
-      child: Wrap(
-          spacing: 32.0,
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.center,
-          children: List.generate(buttons.length, (index) {
-            if (buttons[index]['id'] == "spacing") {
-              return Padding(
-                padding: EdgeInsets.all(18.0),
-              );
-            } else {
-              return RawMaterialButton(
-                  shape: CircleBorder(),
-                  onPressed: () {
-                    onKeyPress(buttons[index]['id']);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(24.0),
-                    child: buttons[index]['item'],
-                  ));
-            }
-          })),
-    );
+    return Keyboard(onEnter: onEnter, buttons: buttons);
   }
 }
